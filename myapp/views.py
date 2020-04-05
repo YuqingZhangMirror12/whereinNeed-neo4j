@@ -196,7 +196,11 @@ def delete_profile(request,username):
 @login_required
 def user_profile(request, username):
     user = User.objects.get(username=username)
-    return render(request, 'user_profile.html', {"user":user})
+    dishes = Charity.objects.filter(likes=user)
+    return_list = []
+    for dish in dishes:
+        return_list.append(dish)
+    return render(request, 'user_profile.html',{ "user":user,'dishes': return_list})
 
 def category_view(request,*args,**kwargs):
     charities=Charity.objects.all()

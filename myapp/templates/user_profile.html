@@ -12,8 +12,12 @@
   <p>Last Name: {{ user.last_name }}</p>
   <br>
   <p>Email: {{ user.email }}</p>
-
+  <br>
   <p>bio: {{ user.bio }}</p>
+  <br>
+  {% for dish in dishes %}
+    <p>like charity: {{ dish.name }}</p>
+  {% endfor %}
   {% endif %}
 
 </div>
