@@ -20,7 +20,11 @@
      <p>{{ item.name }}</p>
   {% endfor %}
   {% endif %}
-
+  <a href="{% url 'delete_profile' username=user.username%}">
+    <button type="button">
+        Delete My Account.
+    </button>
+  </a>
 </div>
 
 
