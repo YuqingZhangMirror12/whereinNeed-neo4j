@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
+from django.db.models import Count
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
@@ -39,9 +40,17 @@ def charity_detail(request, id):
         is_liked = False
         if charity.likes.filter(id = request.user.id).exists():
             is_liked = True
+        categoryset = []
+        returnlist = []
+        for cat in charity.category.all():
+            categoryset.append(cat.name)
+        for catename in categoryset:
+            charityset = Charity.objects.filter(category__name=catename).annotate(total_votes=Count('likes')).order_by('-total_votes')[:3]
+            for item in charityset:
+                returnlist.append(item)
     except Charity.DoesNotExist:
         raise Http404('Charity not found')
-    return render(request, 'charity_detail.html', {'charity': charity, 'is_liked': is_liked, 'total_likes':charity.total_likes()})
+    return render(request, 'charity_detail.html', {'charity': charity, 'is_liked': is_liked, 'total_likes':charity.total_likes(),'recommendlist':returnlist})
 
 
 def signup(request):
@@ -196,11 +205,11 @@ def delete_profile(request,username):
 @login_required
 def user_profile(request, username):
     user = User.objects.get(username=username)
-    dishes = Charity.objects.filter(likes=user)
+    charityset = Charity.objects.filter(likes=user)
     return_list = []
-    for dish in dishes:
-        return_list.append(dish)
-    return render(request, 'user_profile.html',{ "user":user,'dishes': return_list})
+    for item in charityset:
+        return_list.append(item)
+    return render(request, 'user_profile.html',{ "user":user,'likelist': return_list})
 
 def category_view(request,*args,**kwargs):
     charities=Charity.objects.all()

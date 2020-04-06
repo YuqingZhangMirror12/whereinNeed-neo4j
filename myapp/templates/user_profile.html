@@ -15,8 +15,9 @@
   <br>
   <p>bio: {{ user.bio }}</p>
   <br>
-  {% for dish in dishes %}
-    <p>like charity: {{ dish.name }}</p>
+  <p>Liked Charity:</p>
+  {% for item in likelist %}
+     <p>{{ item.name }}</p>
   {% endfor %}
   {% endif %}
 

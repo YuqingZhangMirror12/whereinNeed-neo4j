@@ -23,6 +23,12 @@
   <br>
   <h5>Our Mission</h5>
   <p>{{ charity.mission }}</p>
+  <br>
+  <h5>Recommendation</h5>
+  <p>Recommend Charities:</p>
+  {% for item in recommendlist %}
+      <p>{{ item.name }}</p>
+  {% endfor %}
 </div>
 
 
